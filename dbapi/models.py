@@ -4,12 +4,8 @@ from mapbox_location_field.models import LocationField
 import datetime
 import uuid
 
+from django.db.models import JSONField
 from django.contrib.postgres.fields import ArrayField
-
-
-
-
-
 
 # Create your models here.
 class User(models.Model):
@@ -39,6 +35,8 @@ class ServiceProvider(models.Model):
         ("I","Inactive")
     )
 
+    
+
     sp_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     phone_number = PhoneNumberField()
@@ -46,7 +44,7 @@ class ServiceProvider(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     status = models.CharField(max_length=1, choices = status_choices)
-    ratings = models.DecimalField(max_digits=9, decimal_places=6)
+    rating = models.DecimalField(max_digits=9, decimal_places=6)
 
 
 class Trucks(models.Model):
@@ -58,6 +56,7 @@ class Trucks(models.Model):
 
 
 class Orders(models.Model):
+    
     order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     pickup_location = LocationField()
@@ -69,6 +68,13 @@ class Orders(models.Model):
     pickup_date = models.DateTimeField()
     serice_provider_id = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     serviceProviderTruck_id = models.ForeignKey(Trucks, on_delete=models.CASCADE)
+    cargo_items = models.JSONField()
+    
+    
+    
+    
+   
+    
 
 
 class ServiceProviderUser(models.Model):
